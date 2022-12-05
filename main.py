@@ -24,7 +24,7 @@ DATABASE = 'dd'
 query = """
 select count(*) from dd.weblog_superset_dt_2022092221 where device_type is null;
 """
-output = "s3://aaa-dsol-test-cases/dfs-validator/validator-outputs/"
+output = "s3://sovrn-prd-ue2-general-data/weblog-superset/dfs-validator-output/"
 
 s3 = boto3.resource('s3')
 
