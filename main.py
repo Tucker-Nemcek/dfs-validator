@@ -22,7 +22,7 @@ DATABASE = 'dd'
 #TODO: Do we want to randomize this? When do we want our check?
 
 query = """
-select count(*) from dd.weblog_superset_dt_2022092221 where device_type is null;
+select count(*) from dd.weblog_superset_dt_2021102922 where device_type is null;
 """
 output = "s3://sovrn-prd-ue2-general-data/weblog-superset/dfs-validator-output/"
 
