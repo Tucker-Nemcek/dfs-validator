@@ -12,8 +12,7 @@ DATABASE = 'dd'
 query = """
 select count(*) from dd.weblog_superset_dt_2021102922 where device is null;
 """
-output = "s3://aaa-dsol-test-cases/dfs-validator/validator-outputs/"
-#s3://sovrn-data-working-prd/dfs-validator/
+output = "s3://sovrn-data-working-prd/dfs-validator/"
 
 session = boto3.Session(
     aws_access_key_id=settings.AWS_SERVER_PUBLIC_KEY,#NEED THIS
