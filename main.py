@@ -7,6 +7,7 @@ import time
 import sys
 from botocore.exceptions import ClientError
 
+
 DATABASE = 'dd'
 
 query = """
