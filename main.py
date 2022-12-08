@@ -7,22 +7,23 @@ import time
 import sys
 from botocore.exceptions import ClientError
 
-
-DATABASE = 'dd'
+client = boto3.client('athena', region_name='us-east-1' )
+s3 = boto3.resource('s3')
 
 query = """
 select count(*) from dd.weblog_superset_dt_2021102922 where device is null;
 """
+DATABASE = 'dd'
 output = "s3://sovrn-data-working-prd/dfs-validator/"
 
-session = boto3.Session(
-    aws_access_key_id=settings.AWS_SERVER_PUBLIC_KEY,#NEED THIS
-    aws_secret_access_key='111CzwGSh9U93UQpLLhjtP+5Oj7pmA/hAZ02Nh6d',
-)
 
-s3 = boto3.resource('s3')
+#session = boto3.Session(
+#    aws_access_key_id='ASIA242ZFWYZVULFQCAY',
+#    aws_secret_access_key='111CzwGSh9U93UQpLLhjtP+5Oj7pmA/hAZ02Nh6d',
+#)
 
-client = boto3.client('athena', region_name='us-east-2')
+
+
 
 def execute_query(): 
     response_query_execution_id = client.start_query_execution(
