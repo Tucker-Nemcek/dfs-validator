@@ -7,23 +7,17 @@ import time
 import sys
 from botocore.exceptions import ClientError
 
-client = boto3.client('athena', region_name='us-east-1' )
+client = boto3.client('athena', region_name='us-east-2' ) #east-1 OPS, #west-1 DEV
 s3 = boto3.resource('s3')
 
 query = """
-select count(*) from dd.weblog_superset_dt_2021102922 where device is null;
+select count(*) from dd.weblog_superset_dt_2021102922 where device_type is null;
 """
+
 DATABASE = 'dd'
-output = "s3://sovrn-data-working-prd/dfs-validator/"
-
-
-#session = boto3.Session(
-#    aws_access_key_id='ASIA242ZFWYZVULFQCAY',
-#    aws_secret_access_key='111CzwGSh9U93UQpLLhjtP+5Oj7pmA/hAZ02Nh6d',
-#)
-
-
-
+output = "s3://aaa-dsol-test-cases/dfs-validator/validator-outputs/"
+#"s3://sovrn-data-working-prd/dfs-validator/"
+#"s3://aaa-dsol-test-cases/dfs-validator/validator-outputs/"
 
 def execute_query(): 
     response_query_execution_id = client.start_query_execution(
