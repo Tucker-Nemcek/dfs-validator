@@ -7,11 +7,10 @@ import time
 import sys
 from botocore.exceptions import ClientError
 
-client = boto3.client('athena', region_name='us-east-1' ) #east-1 OPS, #west-1 DEV
 s3 = boto3.resource('s3')
 
 query = """
-select count(*) from dd.weblog_superset_dt_2021102922 where device_type is null;
+select count(*) from dd.weblog_superset_dt_2021102922 where device is null;
 """
 
 DATABASE = 'dd'
@@ -20,6 +19,8 @@ output = "s3://sovrn-data-working-prd/dfs-validator/"
 #"s3://aaa-dsol-test-cases/dfs-validator/validator-outputs/"
 
 def execute_query():
+    
+    client = boto3.client('athena', region_name='us-east-1' ) #east-1 OPS, #west-1 DEV
     response_query_execution_id = client.start_query_execution(
         QueryString = query,
         QueryExecutionContext = {
@@ -37,12 +38,12 @@ def execute_query():
     iterations = 5
     while(iterations > 0):
         iterations = iterations -1
+        response_get_query_details=client.get_query_execution(QueryExecutionId=response_query_execution_id['QueryExecutionId'])
         status = response_get_query_details['QueryExecution']['Status']['State']
-        if(status == "QUEUED"):
-            iterations = iterations +1
-            print(status)
+        error = response_get_query_details['QueryExecution']['Status']
+        print(status)
         if(status == 'FAILED') or (status == 'CANCELLED'):
-            print('ansible job failed')
+            print(error)
             return False
         elif status == 'SUCCEEDED':
             location = response_get_query_details['QueryExecution']['ResultConfiguration']['OutputLocation']
