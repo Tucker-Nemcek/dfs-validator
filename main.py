@@ -39,7 +39,7 @@ def execute_query():
         iterations = iterations -1
         status = response_get_query_details['QueryExecution']['Status']['State']
         if(status == "QUEUED"):
-            iterations == iterations +1
+            iterations = iterations +1
             print(status)
         if(status == 'FAILED') or (status == 'CANCELLED'):
             print('ansible job failed')
