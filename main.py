@@ -14,13 +14,13 @@ select count(*) from dd.weblog_superset_dt_2021102922 where device is null;
 """
 
 DATABASE = 'dd'
-output = "s3://sovrn-data-working-prd/dfs-validator/"
+output = "s3://athena-sovrn-data-working-prd/dfs-validator/"
 #"s3://sovrn-data-working-prd/dfs-validator/"
 #"s3://aaa-dsol-test-cases/dfs-validator/validator-outputs/"
 
 def execute_query():
     
-    client = boto3.client('athena', region_name='us-east-1' ) #east-1 OPS, #west-1 DEV
+    client = boto3.client('athena', region_name='us-east-2' ) #east-1 OPS, #east-2 DEV
     response_query_execution_id = client.start_query_execution(
         QueryString = query,
         QueryExecutionContext = {
