@@ -15,13 +15,11 @@ select count(*) from dd.weblog_superset_dt_2021102922 where device is null;
 
 DATABASE = 'dd'
 output = "s3://athena-sovrn-data-working-prd/dfs-validator/"
-#"s3://sovrn-data-working-prd/dfs-validator/"
-#"s3://aaa-dsol-test-cases/dfs-validator/validator-outputs/"
 
 def execute_query():
     
     client = boto3.client('athena', region_name='us-east-2' ) #east-1 OPS, #east-2 DEV
-    response_query_execution_id = client.start_query_execution(
+    response_query_execution_id = client.start_query_execution( #gets QueryExecutionId
         QueryString = query,
         QueryExecutionContext = {
             'Database' : DATABASE
@@ -34,7 +32,7 @@ def execute_query():
     response_get_query_details = client.get_query_execution(QueryExecutionId = response_query_execution_id['QueryExecutionId'])
 
     status = 'RUNNING'
-     #check for status of query execution every second for 5 seconds. TODO: adjust this based on needs
+     #check for status of query execution every second for 5 seconds.
     iterations = 5
     while(iterations > 0):
         iterations = iterations -1
