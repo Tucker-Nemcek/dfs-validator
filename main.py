@@ -1,11 +1,5 @@
-import os
-import pyspark
 import boto3
-import json
-import datetime
 import time
-import sys
-from botocore.exceptions import ClientError
 
 s3 = boto3.resource('s3')
 
