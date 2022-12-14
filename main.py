@@ -8,7 +8,7 @@ select count(*) from dd.weblog_superset_dt_2021102922 where device is null;
 """
 
 DATABASE = 'dd'
-output = "s3://athena-sovrn-data-working-prd/dfs-validator/"
+output = "s3://athena-sovrn-data-working-prd/dfs-validator/outputs"
 
 def execute_query():
     
