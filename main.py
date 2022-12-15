@@ -1,8 +1,6 @@
 import boto3
 import time
 
-s3 = boto3.resource('s3')
-
 query = """
 select count(*) from dd.weblog_superset_dt_2021102922 where device is null;
 """
@@ -10,7 +8,11 @@ select count(*) from dd.weblog_superset_dt_2021102922 where device is null;
 DATABASE = 'dd'
 output = "s3://athena-sovrn-data-working-prd/dfs-validator/outputs"
 
-def execute_query():
+def lambda_handler(event, context):
+    
+    s3 = boto3.resource('s3')
+    bucket = s3.Bucket('s3://athena-sovrn-data-working-prd/dfs-validator/outputs/')
+    exists = True
     
     client = boto3.client('athena', region_name='us-east-2' ) #east-1 OPS, #east-2 DEV
     response_query_execution_id = client.start_query_execution( #gets QueryExecutionId
@@ -46,9 +48,8 @@ def execute_query():
             print('headers ' +str(rowheaders))
             for row in response_query_result['ResultSet']['Rows']:
                 print(row)
-
+    
             return True
         else:
-            time.sleep(1)
-
-execute_query()
+            print ('sleeping for 10 seconds')
+            time.sleep(10)
