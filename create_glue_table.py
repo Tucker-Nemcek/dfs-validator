@@ -2,12 +2,14 @@ import boto3
 
 client = boto3.client('glue')
 
+#end result is: dfs-validator-crawl-tabledt_2022121500
+
 def create_crawler() :
     response = client.create_crawler(
-        Name='dfs-validator_crawler',
+        Name='dfs_validator_crawler',
         Role='df-glue-common-role-prd-ue1',
         DatabaseName='dd',
-        Description='Crawler for validating Daas-Feed-Spark',
+        Description='Crawler for validating Daas-Feeds-Spark',
         Targets={
             'S3Targets': [
                 {
@@ -16,7 +18,7 @@ def create_crawler() :
                 }
             ]
         },
-        TablePrefix='dfs-validator-crawl-table',
+        TablePrefix='dfs_validator_glue_table_',
         SchemaChangePolicy={
             'UpdateBehavior': 'UPDATE_IN_DATABASE',
         },
@@ -26,14 +28,24 @@ def create_crawler() :
 
 create_crawler()
 
-# response = client.start_crawler(
-#     Name='SalesCSVCrawler'
-# )
+def start_crawler():
+    response = client.start_crawler(
+        Name='dfs_validator_crawler'
+    )
+    print('crawler started')
+start_crawler()
+
+# def delete_crawler():
+#     response = client.delete_crawler(
+#         Name="dfs_validator_crawler"
+#     )
+#     print('crawler deleted')
+# delete_crawler()
 
 # response = client.update_table(
 #     DatabaseName='dd',
 #     TableInput={
-#         'Name': 'dfs-validator-crawler',
+#         'Name': 'dfs_validator_crawler_',
 #         'Description': 'Table Sales',
 #         'StorageDescriptor': {
 #             'SerdeInfo': {
