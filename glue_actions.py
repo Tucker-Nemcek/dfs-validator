@@ -3,7 +3,7 @@ import get_time_values
 
 client = boto3.client('glue')
 
-get_dt_path = get_time_values.get_todays_dt_path()
+dt_path = get_time_values.get_todays_first_dt_path()
 
 def create_crawler() :
     response = client.create_crawler(
@@ -14,7 +14,7 @@ def create_crawler() :
         Targets={
             'S3Targets': [
                 {
-                    'Path': get_dt_path,
+                    'Path': dt_path,
                     'SampleSize': 1
                 }
             ]
