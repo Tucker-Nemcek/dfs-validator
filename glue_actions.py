@@ -1,31 +1,40 @@
 import boto3
 import get_time_values
+import botocore
+import logging
+
+
 
 client = boto3.client('glue')
 
 dt_path = get_time_values.get_todays_first_dt_path()
 
+
 def create_crawler() :
-    response = client.create_crawler(
-        Name='dfs_validator_crawler',
-        Role='df-glue-common-role-prd-ue1',
-        DatabaseName='dd',
-        Description='Crawler for validating Daas-Feeds-Spark',
-        Targets={
-            'S3Targets': [
-                {
-                    'Path': dt_path,
-                    'SampleSize': 1
-                }
-            ]
-        },
-        TablePrefix='dfs_validator_glue_table_',
-        SchemaChangePolicy={
-            'UpdateBehavior': 'UPDATE_IN_DATABASE',
-        },
-        Configuration='{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior": "InheritFromTable" } } }'
-    )
-    print('crawler created')
+    try:
+        response = client.create_crawler(
+            Name='dfs_validator_crawler',
+            Role='df-glue-common-role-prd-ue1',
+            DatabaseName='dd',
+            Description='Crawler for validating Daas-Feeds-Spark',
+            Targets={
+                'S3Targets': [
+                    {
+                        'Path': dt_path,
+                        'SampleSize': 1
+                    }
+                ]
+            },
+            TablePrefix='dfs_validator_glue_table_',
+            SchemaChangePolicy={
+                'UpdateBehavior': 'UPDATE_IN_DATABASE',
+            },
+            Configuration='{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior": "InheritFromTable" } } }'
+        )
+        print('crawler created')
+    except botocore.exceptions.ClientError as error:
+        logging.warn(error.response['Error']['Code'])
+        raise Exception(error.response['Error']['Code'])    
 
 
 def start_crawler():
